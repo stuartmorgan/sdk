@@ -4,6 +4,7 @@
 //
 // VMOptions=--enable-testing-pragmas --no-background-compilation --optimization-counter-threshold=10
 // VMOptions=--enable-testing-pragmas --no-background-compilation --optimization-counter-threshold=10 -Denable_inlining=true
+// VMOptions=--enable-testing-pragmas --no-background-compilation --optimization-counter-threshold=-1
 
 // Test that typed calls against tearoffs go into the unchecked entrypoint.
 
@@ -23,19 +24,11 @@ class C<T> {
 main(List<String> args) {
   var f = (new C<int>()).target1;
 
-  // Warmup.
-  expectedEntryPoint = -1;
-  expectedTearoffEntryPoint = -1;
-  for (int i = 0; i < 100; ++i) {
-    f(i, "foo");
-  }
-
-  expectedEntryPoint = 0;
-  expectedTearoffEntryPoint = 1;
   const int iterations = benchmarkMode ? 100000000 : 100;
   for (int i = 0; i < iterations; ++i) {
     f(i, "foo");
   }
 
-  Expect.isTrue(validateRan);
+  Expect.isTrue(entryPoint.unchecked < 10);
+  Expect.isTrue(tearoffEntryPoint.checked < 10);
 }

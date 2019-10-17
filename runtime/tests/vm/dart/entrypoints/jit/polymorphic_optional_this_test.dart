@@ -4,6 +4,7 @@
 //
 // VMOptions=--enable-testing-pragmas --no-background-compilation --optimization-counter-threshold=10 -Denable_inlining=true
 // VMOptions=--enable-testing-pragmas --no-background-compilation --optimization-counter-threshold=10
+// VMOptions=--enable-testing-pragmas --no-background-compilation --optimization-counter-threshold=-1
 
 // Test that 'PolymorphicInstanceCall's against "this" go through the unchecked
 // entrypoint. The use of optional arguments here encourages prologue sharing
@@ -15,14 +16,6 @@ import "package:expect/expect.dart";
 abstract class C<T> {
   @NeverInline
   void samir1(T x) {
-    // Make sure this method gets optimized before main.
-    // Otherwise it might get inlined into warm-up loop, and subsequent
-    // loop will call an unoptimized version (which is not guaranteed to
-    // dispatch to unchecked entry point).
-    bumpUsageCounter();
-    bumpUsageCounter();
-    bumpUsageCounter();
-
     samir2(x, y: "hi");
   }
 
@@ -62,17 +55,10 @@ C getC() {
 }
 
 main(List<String> args) {
-  // Warmup.
-  expectedEntryPoint = -1;
-  for (int i = 0; i < 100; ++i) {
-    getC().samir1(i);
-  }
-
-  expectedEntryPoint = 2;
   const int iterations = benchmarkMode ? 100000000 : 100;
   for (int i = 0; i < iterations; ++i) {
     getC().samir1(i);
   }
 
-  Expect.isTrue(validateRan);
+  Expect.isTrue(entryPoint.checked < 10);
 }
