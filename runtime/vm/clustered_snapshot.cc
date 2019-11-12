@@ -1390,10 +1390,12 @@ class CodeSerializationCluster : public SerializationCluster {
       s->Push(code->ptr()->deopt_info_array_);
       s->Push(code->ptr()->static_calls_target_table_);
     }
-    NOT_IN_PRODUCT(s->Push(code->ptr()->return_address_metadata_));
+#if !defined(PRODUCT)
+    s->Push(code->ptr()->return_address_metadata_);
     if (FLAG_code_comments) {
       s->Push(code->ptr()->comments_);
     }
+#endif
   }
 
   void WriteAlloc(Serializer* s) {
@@ -1454,11 +1456,12 @@ class CodeSerializationCluster : public SerializationCluster {
         WriteField(code, deopt_info_array_);
         WriteField(code, static_calls_target_table_);
       }
-      NOT_IN_PRODUCT(WriteField(code, return_address_metadata_));
+#if !defined(PRODUCT)
+      WriteField(code, return_address_metadata_);
       if (FLAG_code_comments) {
         WriteField(code, comments_);
       }
-
+#endif
       s->Write<int32_t>(code->ptr()->state_bits_);
     }
   }
