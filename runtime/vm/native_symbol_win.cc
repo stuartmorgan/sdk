@@ -27,7 +27,7 @@ void NativeSymbolResolver::Init() {
   HANDLE hProcess = GetCurrentProcess();
   if (!SymInitialize(hProcess, NULL, TRUE)) {
     DWORD error = GetLastError();
-    printf("Failed to init NativeSymbolResolver (SymInitialize %d)\n", error);
+    printf("Failed to init NativeSymbolResolver (SymInitialize %lu)\n", error);
     return;
   }
 }
@@ -41,7 +41,7 @@ void NativeSymbolResolver::Cleanup() {
   HANDLE hProcess = GetCurrentProcess();
   if (!SymCleanup(hProcess)) {
     DWORD error = GetLastError();
-    printf("Failed to shutdown NativeSymbolResolver (SymCleanup  %d)\n", error);
+    printf("Failed to shutdown NativeSymbolResolver (SymCleanup  %lu)\n", error);
   }
 }
 

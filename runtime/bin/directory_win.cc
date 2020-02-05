@@ -226,7 +226,7 @@ void DirectoryListingEntry::ResetLink() {
   }
 }
 
-static bool DeleteFile(wchar_t* file_name, PathBuffer* path) {
+static bool DeleteFile(const wchar_t* file_name, PathBuffer* path) {
   if (!path->AddW(file_name)) {
     return false;
   }
