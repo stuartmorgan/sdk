@@ -2,11 +2,12 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
+#include "vm/profiler.h"
+
 #include "platform/address_sanitizer.h"
+#include "platform/atomic.h"
 #include "platform/memory_sanitizer.h"
 #include "platform/utils.h"
-
-#include "platform/atomic.h"
 #include "vm/allocation.h"
 #include "vm/code_patcher.h"
 #include "vm/debugger.h"
@@ -18,7 +19,6 @@
 #include "vm/native_symbol.h"
 #include "vm/object.h"
 #include "vm/os.h"
-#include "vm/profiler.h"
 #include "vm/reusable_handles.h"
 #include "vm/signal_handler.h"
 #include "vm/simulator.h"
@@ -212,8 +212,7 @@ SampleBuffer::~SampleBuffer() {
   delete memory_;
 }
 
-AllocationSampleBuffer::~AllocationSampleBuffer() {
-}
+AllocationSampleBuffer::~AllocationSampleBuffer() {}
 
 Sample* SampleBuffer::At(intptr_t idx) const {
   ASSERT(idx >= 0);
@@ -1094,6 +1093,10 @@ void Profiler::DumpStackTrace(void* context) {
   uword pc = static_cast<uword>(ctx->Rip);
   uword fp = static_cast<uword>(ctx->Rbp);
   uword sp = static_cast<uword>(ctx->Rsp);
+#elif defined(HOST_ARCH_ARM64)
+  uword pc = static_cast<uword>(ctx->Pc);
+  uword fp = static_cast<uword>(ctx->Fp);
+  uword sp = static_cast<uword>(ctx->Sp);
 #else
 #error Unsupported architecture.
 #endif

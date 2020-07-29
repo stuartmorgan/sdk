@@ -30,6 +30,9 @@ class ThreadInterrupterWin : public AllStatic {
     // On X64, CONTEXT_CONTROL includes Rip and Rsp. Rbp is classified
     // as an "integer" register.
     context.ContextFlags = CONTEXT_CONTROL | CONTEXT_INTEGER;
+#elif defined(HOST_ARCH_ARM64)
+    // On ARM64, CONTEXT_CONTROL includes Pc, Fp, and Sp.
+    context.ContextFlags = CONTEXT_CONTROL;
 #else
 #error Unsupported architecture.
 #endif
@@ -44,6 +47,11 @@ class ThreadInterrupterWin : public AllStatic {
       state->fp = static_cast<uintptr_t>(context.Rbp);
       state->csp = static_cast<uintptr_t>(context.Rsp);
       state->dsp = static_cast<uintptr_t>(context.Rsp);
+#elif defined(HOST_ARCH_ARM64)
+      state->pc = static_cast<uintptr_t>(context.Pc);
+      state->fp = static_cast<uintptr_t>(context.Fp);
+      state->csp = static_cast<uintptr_t>(context.Sp);
+      state->dsp = static_cast<uintptr_t>(context.Sp);
 #else
 #error Unsupported architecture.
 #endif

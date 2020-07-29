@@ -5,17 +5,15 @@
 #include "platform/globals.h"  // NOLINT
 #if defined(HOST_OS_WINDOWS)
 
-#include "vm/growable_array.h"
-#include "vm/lockers.h"
-#include "vm/os_thread.h"
-
 #include <process.h>  // NOLINT
 
 #include "platform/address_sanitizer.h"
 #include "platform/assert.h"
 #include "platform/safe_stack.h"
-
 #include "vm/flags.h"
+#include "vm/growable_array.h"
+#include "vm/lockers.h"
+#include "vm/os_thread.h"
 
 namespace dart {
 
@@ -175,9 +173,14 @@ bool OSThread::GetCurrentStackBounds(uword* lower, uword* upper) {
 // On Windows stack limits for the current thread are available in
 // the thread information block (TIB). Its fields can be accessed through
 // FS segment register on x86 and GS segment register on x86_64.
-#ifdef _WIN64
+#if defined(_M_ARM64)
+  ULONG_PTR low, high;
+  // XXX Not sure about type issues here.
+  ::GetCurrentThreadStackLimits(&low, &high);
+  *upper = reinterpret_cast<uword>(high);
+#elif defined(_WIN64)
   *upper = static_cast<uword>(__readgsqword(offsetof(NT_TIB64, StackBase)));
-#else
+#elif
   *upper = static_cast<uword>(__readfsdword(offsetof(NT_TIB, StackBase)));
 #endif
   // Notice that we cannot use the TIB's StackLimit for the stack end, as it

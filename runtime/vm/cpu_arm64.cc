@@ -7,10 +7,10 @@
 
 #include "vm/cpu.h"
 #include "vm/cpu_arm64.h"
-
 #include "vm/cpuinfo.h"
 #include "vm/simulator.h"
 
+#if !defined(HOST_OS_WINDOWS)
 #if !defined(USING_SIMULATOR)
 #if !defined(HOST_OS_FUCHSIA)
 #include <sys/syscall.h>
@@ -18,6 +18,7 @@
 #include <zircon/syscalls.h>
 #endif
 #include <unistd.h>
+#endif
 #endif
 
 #if defined(HOST_OS_IOS)
@@ -53,6 +54,10 @@ void CPU::FlushICache(uword start, uword size) {
   zx_status_t result = zx_cache_flush(reinterpret_cast<const void*>(start),
                                       size, ZX_CACHE_FLUSH_INSN);
   ASSERT(result == ZX_OK);
+#elif defined(HOST_OS_WINDOWS)
+  // XXX untested
+  ::FlushInstructionCache(::GetCurrentProcess(), reinterpret_cast<void*>(start),
+                          size);
 #else
 #error FlushICache only tested/supported on Android, Fuchsia, Linux and iOS
 #endif
