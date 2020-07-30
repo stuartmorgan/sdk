@@ -2,12 +2,11 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
-import 'package:analyzer/dart/analysis/features.dart';
 import 'package:analyzer/src/error/codes.dart';
-import 'package:analyzer/src/generated/engine.dart';
 import 'package:test_reflective_loader/test_reflective_loader.dart';
 
 import '../dart/resolution/driver_resolution.dart';
+import '../dart/resolution/with_null_safety_mixin.dart';
 
 main() {
   defineReflectiveSuite(() {
@@ -16,15 +15,8 @@ main() {
 }
 
 @reflectiveTest
-class GetterNotSubtypeSetterTypesTest extends DriverResolutionTest {
-  @override
-  AnalysisOptionsImpl get analysisOptions => AnalysisOptionsImpl()
-    ..contextFeatures = FeatureSet.forTesting(
-        sdkVersion: '2.7.0', additionalFeatures: [Feature.non_nullable]);
-
-  @override
-  bool get typeToStringWithNullability => true;
-
+class GetterNotSubtypeSetterTypesTest extends DriverResolutionTest
+    with WithNullSafetyMixin {
   test_class_instance() async {
     await assertErrorsInCode('''
 class C {
@@ -32,7 +24,7 @@ class C {
   set foo(int v) {}
 }
 ''', [
-      error(StaticWarningCode.GETTER_NOT_SUBTYPE_SETTER_TYPES, 20, 3),
+      error(CompileTimeErrorCode.GETTER_NOT_SUBTYPE_SETTER_TYPES, 20, 3),
     ]);
   }
 
@@ -43,7 +35,7 @@ class C {
   set foo(String v) {}
 }
 ''', [
-      error(StaticWarningCode.GETTER_NOT_SUBTYPE_SETTER_TYPES, 16, 3),
+      error(CompileTimeErrorCode.GETTER_NOT_SUBTYPE_SETTER_TYPES, 16, 3),
     ]);
   }
 
@@ -68,7 +60,7 @@ class B {
 
 abstract class X implements A, B {}
 ''', [
-      error(StaticWarningCode.GETTER_NOT_SUBTYPE_SETTER_TYPES, 84, 1),
+      error(CompileTimeErrorCode.GETTER_NOT_SUBTYPE_SETTER_TYPES, 84, 1),
     ]);
   }
 
@@ -149,7 +141,7 @@ class C {
   set foo(String _) {}
 }
 ''', [
-      error(StaticWarningCode.GETTER_NOT_SUBTYPE_SETTER_TYPES, 20, 3),
+      error(CompileTimeErrorCode.GETTER_NOT_SUBTYPE_SETTER_TYPES, 20, 3),
     ]);
   }
 
@@ -194,7 +186,7 @@ class B extends A {
   set foo(String _) {}
 }
 ''', [
-      error(StaticWarningCode.GETTER_NOT_SUBTYPE_SETTER_TYPES, 59, 3),
+      error(CompileTimeErrorCode.GETTER_NOT_SUBTYPE_SETTER_TYPES, 59, 3),
     ]);
   }
 
@@ -208,7 +200,7 @@ class B extends A {
   int get foo => 0;
 }
 ''', [
-      error(StaticWarningCode.GETTER_NOT_SUBTYPE_SETTER_TYPES, 66, 3),
+      error(CompileTimeErrorCode.GETTER_NOT_SUBTYPE_SETTER_TYPES, 66, 3),
     ]);
   }
 
@@ -219,7 +211,7 @@ class C {
   static set foo(int v) {}
 }
 ''', [
-      error(StaticWarningCode.GETTER_NOT_SUBTYPE_SETTER_TYPES, 27, 3),
+      error(CompileTimeErrorCode.GETTER_NOT_SUBTYPE_SETTER_TYPES, 27, 3),
     ]);
   }
 
@@ -230,7 +222,7 @@ extension E on Object {
   set foo(String v) {}
 }
 ''', [
-      error(StaticWarningCode.GETTER_NOT_SUBTYPE_SETTER_TYPES, 34, 3),
+      error(CompileTimeErrorCode.GETTER_NOT_SUBTYPE_SETTER_TYPES, 34, 3),
     ]);
   }
 
@@ -241,7 +233,7 @@ extension E on Object {
   static set foo(String v) {}
 }
 ''', [
-      error(StaticWarningCode.GETTER_NOT_SUBTYPE_SETTER_TYPES, 41, 3),
+      error(CompileTimeErrorCode.GETTER_NOT_SUBTYPE_SETTER_TYPES, 41, 3),
     ]);
   }
 
@@ -250,7 +242,7 @@ extension E on Object {
 int get foo => 0;
 set foo(String v) {}
 ''', [
-      error(StaticWarningCode.GETTER_NOT_SUBTYPE_SETTER_TYPES, 8, 3),
+      error(CompileTimeErrorCode.GETTER_NOT_SUBTYPE_SETTER_TYPES, 8, 3),
     ]);
   }
 
@@ -259,7 +251,7 @@ set foo(String v) {}
 get foo => 0;
 set foo(int v) {}
 ''', [
-      error(StaticWarningCode.GETTER_NOT_SUBTYPE_SETTER_TYPES, 4, 3),
+      error(CompileTimeErrorCode.GETTER_NOT_SUBTYPE_SETTER_TYPES, 4, 3),
     ]);
   }
 

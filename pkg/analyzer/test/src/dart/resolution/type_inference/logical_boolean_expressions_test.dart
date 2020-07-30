@@ -2,18 +2,17 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
-import 'package:analyzer/dart/analysis/features.dart';
-import 'package:analyzer/src/generated/engine.dart';
 import 'package:test_reflective_loader/test_reflective_loader.dart';
 
 import '../driver_resolution.dart';
+import '../with_null_safety_mixin.dart';
 
 main() {
   defineReflectiveSuite(() {
     defineReflectiveTests(LogicalAndTest);
-    defineReflectiveTests(LogicalAndWithNnbdTest);
+    defineReflectiveTests(LogicalAndWithNullSafetyTest);
     defineReflectiveTests(LogicalOrTest);
-    defineReflectiveTests(LogicalOrWithNnbdTest);
+    defineReflectiveTests(LogicalOrWithNullSafetyTest);
   });
 }
 
@@ -31,15 +30,8 @@ void f(bool a, bool b) {
 }
 
 @reflectiveTest
-class LogicalAndWithNnbdTest extends LogicalAndTest {
-  @override
-  AnalysisOptionsImpl get analysisOptions => AnalysisOptionsImpl()
-    ..contextFeatures = FeatureSet.forTesting(
-        sdkVersion: '2.3.0', additionalFeatures: [Feature.non_nullable]);
-
-  @override
-  bool get typeToStringWithNullability => true;
-
+class LogicalAndWithNullSafetyTest extends LogicalAndTest
+    with WithNullSafetyMixin {
   @failingTest
   test_downward() async {
     await resolveTestCode('''
@@ -69,15 +61,8 @@ void f(bool a, bool b) {
 }
 
 @reflectiveTest
-class LogicalOrWithNnbdTest extends LogicalOrTest {
-  @override
-  AnalysisOptionsImpl get analysisOptions => AnalysisOptionsImpl()
-    ..contextFeatures = FeatureSet.forTesting(
-        sdkVersion: '2.3.0', additionalFeatures: [Feature.non_nullable]);
-
-  @override
-  bool get typeToStringWithNullability => true;
-
+class LogicalOrWithNullSafetyTest extends LogicalOrTest
+    with WithNullSafetyMixin {
   @failingTest
   test_downward() async {
     await resolveTestCode('''

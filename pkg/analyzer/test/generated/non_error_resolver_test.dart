@@ -1324,27 +1324,6 @@ class A {
 ''');
   }
 
-  test_for_in_scope() async {
-    await assertNoErrorsInCode('''
-main() {
-  List<List<int>> x = [[1]];
-  for (int x in x.first) {
-    print(x.isEven);
-  }
-}
-''');
-  }
-
-  test_forEach_genericFunctionType() async {
-    await assertNoErrorsInCode(r'''
-main() {
-  for (Null Function<T>(T, Null) e in <dynamic>[]) {
-    e;
-  }
-}
-''');
-  }
-
   test_functionDeclaration_scope_returnType() async {
     await assertNoErrorsInCode('''
 int f(int) { return 0; }
@@ -2202,7 +2181,7 @@ void main() {
 }
 ''', [
       error(HintCode.UNUSED_LOCAL_VARIABLE, 93, 1),
-      error(StaticTypeWarningCode.INVALID_ASSIGNMENT, 97, 1),
+      error(CompileTimeErrorCode.INVALID_ASSIGNMENT, 97, 1),
     ]);
     var z = result.unit.declaredElement.topLevelVariables
         .where((e) => e.name == 'z')
@@ -2817,8 +2796,8 @@ main() {
   null[0];
 }
 ''', [
-      error(StaticTypeWarningCode.UNDEFINED_METHOD, 0, 0),
-      error(StaticTypeWarningCode.UNDEFINED_METHOD, 0, 0),
+      error(CompileTimeErrorCode.UNDEFINED_METHOD, 0, 0),
+      error(CompileTimeErrorCode.UNDEFINED_METHOD, 0, 0),
     ]);
   }
 

@@ -1282,6 +1282,23 @@ class FunctionTypeImplTest extends AbstractTypeTest {
 
 @reflectiveTest
 class InterfaceTypeImplTest extends AbstractTypeTest {
+  void test_allSupertypes() {
+    void check(InterfaceType type, List<String> expected) {
+      var actual = type.allSupertypes.map((e) {
+        return e.getDisplayString(
+          withNullability: true,
+        );
+      }).toList()
+        ..sort();
+      expect(actual, expected);
+    }
+
+    check(objectNone, []);
+    check(numNone, ['Comparable<num>', 'Object']);
+    check(intNone, ['Comparable<num>', 'Object', 'num']);
+    check(listNone(intQuestion), ['Iterable<int?>', 'Object']);
+  }
+
   test_asInstanceOf_explicitGeneric() {
     // class A<E> {}
     // class B implements A<C> {}
@@ -2219,6 +2236,57 @@ main() {
 
 @reflectiveTest
 class TypeParameterTypeImplTest extends AbstractTypeTest {
+  void test_asInstanceOf_hasBound_element() {
+    var T = typeParameter('T', bound: listNone(intNone));
+    _assert_asInstanceOf(
+      typeParameterTypeNone(T),
+      typeProvider.iterableElement,
+      'Iterable<int>',
+    );
+  }
+
+  void test_asInstanceOf_hasBound_element_noMatch() {
+    var T = typeParameter('T', bound: numNone);
+    _assert_asInstanceOf(
+      typeParameterTypeNone(T),
+      typeProvider.iterableElement,
+      null,
+    );
+  }
+
+  void test_asInstanceOf_hasBound_promoted() {
+    var T = typeParameter('T');
+    _assert_asInstanceOf(
+      typeParameterTypeNone(
+        T,
+        promotedBound: listNone(intNone),
+      ),
+      typeProvider.iterableElement,
+      'Iterable<int>',
+    );
+  }
+
+  void test_asInstanceOf_hasBound_promoted_noMatch() {
+    var T = typeParameter('T');
+    _assert_asInstanceOf(
+      typeParameterTypeNone(
+        T,
+        promotedBound: numNone,
+      ),
+      typeProvider.iterableElement,
+      null,
+    );
+  }
+
+  void test_asInstanceOf_noBound() {
+    var T = typeParameter('T');
+    _assert_asInstanceOf(
+      typeParameterTypeNone(T),
+      typeProvider.iterableElement,
+      null,
+    );
+  }
+
   void test_creation() {
     expect(typeParameterTypeStar(TypeParameterElementImpl('E', -1)), isNotNull);
   }
@@ -2336,6 +2404,18 @@ class TypeParameterTypeImplTest extends AbstractTypeTest {
         typeParameterTypeStar(TypeParameterElementImpl('F', -1));
     expect(type.substitute2(<DartType>[argument], <DartType>[parameter]),
         same(type));
+  }
+
+  void _assert_asInstanceOf(
+    DartType type,
+    ClassElement element,
+    String expected,
+  ) {
+    var result = (type as TypeImpl).asInstanceOf(element);
+    expect(
+      result?.getDisplayString(withNullability: true),
+      expected,
+    );
   }
 }
 

@@ -132,6 +132,9 @@ ConstEvalNegativeShift:
 ConstEvalTruncateError:
   template: "Binary operator '#string ~/ #string2' results is Infinity or NaN."
 
+ConstEvalNonNull:
+  template: "Constant expression must be non-null."
+
 ConstEvalInvalidMethodInvocation:
   template: "The method '#string' can't be invoked on '#constant' in a constant expression."
   analyzerCode: UNDEFINED_OPERATOR
@@ -551,6 +554,14 @@ AbstractClassMember:
     - "abstract class C {abstract var f;}"
     - "abstract class C {abstract static var f;}"
 
+AbstractExternalField:
+  template: "Fields can't be declared both 'abstract' and 'external'."
+  tip: "Try removing the 'abstract' or 'external' keyword."
+  configuration: nnbd-strong
+  script:
+    - "abstract class C {abstract external var f;}"
+    - "abstract class C {external abstract var f;}"
+
 AbstractStaticField:
   template: "Static fields can't be declared 'abstract'."
   tip: "Try removing the 'abstract' or 'static' keyword."
@@ -771,6 +782,31 @@ ExternalField:
   analyzerCode: ParserErrorCode.EXTERNAL_FIELD
   script:
     - "class C { external var f; }"
+
+
+ExternalFieldInitializer:
+  template: "External fields cannot have initializers."
+  tip: "Try removing the initializer or the 'external' keyword."
+  configuration: nnbd-strong
+  script:
+    - "external var f = 0;"
+    - "abstract class C {external var f = 0;}"
+
+ExternalFieldConstructorInitializer:
+  template: "External fields cannot have initializers."
+  tip: "Try removing the field initializer or the 'external' keyword from the field declaration."
+  configuration: nnbd-strong
+  script:
+    - "abstract class C {external var f; C(this.f);}"
+    - "abstract class C {external var f; C() : this.f = 0;}"
+
+ExternalLateField:
+  template: "External fields cannot be late."
+  tip: "Try removing the 'external' or 'late' keyword."
+  configuration: nnbd-strong
+  script:
+    - "external late var f;"
+    - "abstract class C {external late var f;}"
 
 InitializerForStaticField:
   template: "'#name' isn't an instance field of this class."
@@ -1866,37 +1902,12 @@ DuplicatedExport:
     lib2.dart: "class A {}"
     main.dart: "export 'lib1.dart'; export 'lib2.dart';"
 
-DuplicatedLibraryExport:
-  template: "A library with name '#name' is exported more than once."
-  analyzerCode: EXPORT_DUPLICATED_LIBRARY_NAMED
-  script:
-    lib1.dart: "library foo;"
-    lib2.dart: "library foo;"
-    main.dart: "export 'lib1.dart'; export 'lib2.dart';"
-
-DuplicatedLibraryExportContext:
-  template: "'#name' is also exported here."
-  severity: CONTEXT
-
 DuplicatedExportInType:
   template: "'#name' is exported from both '#uri' and '#uri2'."
 
 DuplicatedImport:
   template: "'#name' is imported from both '#uri' and '#uri2'."
   severity: IGNORED
-
-DuplicatedLibraryImport:
-  template: "A library with name '#name' is imported more than once."
-  severity: WARNING
-  analyzerCode: IMPORT_DUPLICATED_LIBRARY_NAMED
-  script:
-    lib1.dart: "library foo;"
-    lib2.dart: "library foo;"
-    main.dart: "import 'lib1.dart'; import 'lib2.dart';"
-
-DuplicatedLibraryImportContext:
-  template: "'#name' is also imported here."
-  severity: CONTEXT
 
 DuplicatedImportInType:
   template: "'#name' is imported from both '#uri' and '#uri2'."
@@ -3878,7 +3889,7 @@ SpreadMapElement:
   severity: CONTEXT
 
 NonNullAwareSpreadIsNull:
-  template: "Can't spread a value with static type Null."
+  template: "Can't spread a value with static type '#type'."
   script: >
     main() {
       <int>[...null];

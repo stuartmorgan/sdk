@@ -27,6 +27,13 @@ class AddDiagnosticPropertyReference extends CorrectionProducer {
     if (node is! SimpleIdentifier) {
       return;
     }
+
+    var classDeclaration = node.thisOrAncestorOfType<ClassOrMixinDeclaration>();
+    if (classDeclaration == null ||
+        !flutter.isDiagnosticable(classDeclaration.declaredElement.thisType)) {
+      return;
+    }
+
     SimpleIdentifier name = node;
     final parent = node.parent;
 
@@ -98,10 +105,6 @@ class AddDiagnosticPropertyReference extends CorrectionProducer {
       builder.writeln("$constructorName('${name.name}', ${name.name}));");
     }
 
-    final classDeclaration = parent.thisOrAncestorOfType<ClassDeclaration>();
-    if (classDeclaration == null) {
-      return;
-    }
     final debugFillProperties =
         classDeclaration.getMethod('debugFillProperties');
     if (debugFillProperties == null) {
@@ -190,8 +193,7 @@ class AddDiagnosticPropertyReference extends CorrectionProducer {
   }
 
   bool _isIterable(DartType type) {
-    return type is InterfaceType &&
-        type.asInstanceOf(typeProvider.iterableElement) != null;
+    return type.asInstanceOf(typeProvider.iterableElement) != null;
   }
 
   /// Return an instance of this class. Used as a tear-off in `FixProcessor`.

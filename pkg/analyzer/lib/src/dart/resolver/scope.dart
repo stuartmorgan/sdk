@@ -11,16 +11,21 @@ import 'package:analyzer/src/dart/element/element.dart';
 import 'package:analyzer/src/dart/element/scope.dart';
 import 'package:analyzer/src/dart/element/type.dart';
 import 'package:analyzer/src/generated/engine.dart';
+import 'package:meta/meta.dart';
 
 /// The scope defined by a block.
 class BlockScope {
-  /// Return the elements that are declared directly in the given [block]. This
-  /// does not include elements declared in nested blocks.
-  static Iterable<Element> elementsInBlock(Block block) sync* {
-    NodeList<Statement> statements = block.statements;
+  /// Return the elements that are declared directly in the given [statements].
+  /// This does not include elements declared in nested blocks.
+  static Iterable<Element> elementsInStatements(
+    List<Statement> statements,
+  ) sync* {
     int statementCount = statements.length;
     for (int i = 0; i < statementCount; i++) {
       Statement statement = statements[i];
+      if (statement is LabeledStatement) {
+        statement = (statement as LabeledStatement).statement;
+      }
       if (statement is VariableDeclarationStatement) {
         NodeList<VariableDeclaration> variables = statement.variables.variables;
         int variableCount = variables.length;
@@ -402,21 +407,31 @@ class PrefixedNamespace implements Namespace {
 
 extension ScopeExtension on Scope {
   /// Return `true` if the fact that the given [node] is not defined should be
-  /// ignored (from the perspective of error reporting). This will be the case
-  /// if there is at least one import that defines the node's prefix, and if
-  /// that import either has no show combinators or has a show combinator that
-  /// explicitly lists the node's name.
+  /// ignored (from the perspective of error reporting).
   bool shouldIgnoreUndefined(Identifier node) {
     if (node is PrefixedIdentifier) {
-      return _enclosingLibraryScope.shouldIgnoreUndefined(
+      return shouldIgnoreUndefined2(
         prefix: node.prefix.name,
         name: node.identifier.name,
       );
     }
 
-    return _enclosingLibraryScope.shouldIgnoreUndefined(
+    return shouldIgnoreUndefined2(
       prefix: null,
       name: (node as SimpleIdentifier).name,
+    );
+  }
+
+  /// Return `true` if the fact that the identifier with the given [prefix]
+  /// (might be `null`) and [name] is not defined should be ignored (from the
+  /// perspective of error reporting).
+  bool shouldIgnoreUndefined2({
+    @required String prefix,
+    @required String name,
+  }) {
+    return _enclosingLibraryScope.shouldIgnoreUndefined(
+      prefix: prefix,
+      name: name,
     );
   }
 

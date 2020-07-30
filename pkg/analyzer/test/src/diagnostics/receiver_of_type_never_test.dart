@@ -2,13 +2,11 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
-import 'package:analyzer/dart/analysis/features.dart';
-import 'package:analyzer/src/dart/analysis/experiments.dart';
 import 'package:analyzer/src/error/codes.dart';
-import 'package:analyzer/src/generated/engine.dart';
 import 'package:test_reflective_loader/test_reflective_loader.dart';
 
 import '../dart/resolution/driver_resolution.dart';
+import '../dart/resolution/with_null_safety_mixin.dart';
 
 main() {
   defineReflectiveSuite(() {
@@ -18,16 +16,8 @@ main() {
 }
 
 @reflectiveTest
-class InvalidUseOfNeverTest extends DriverResolutionTest {
-  @override
-  AnalysisOptionsImpl get analysisOptions => AnalysisOptionsImpl()
-    ..contextFeatures = FeatureSet.fromEnableFlags(
-      [EnableString.non_nullable],
-    );
-
-  @override
-  bool get typeToStringWithNullability => true;
-
+class InvalidUseOfNeverTest extends DriverResolutionTest
+    with WithNullSafetyMixin {
   test_binaryExpression_never_eqEq() async {
     await assertErrorsInCode(r'''
 void main(Never x) {
@@ -88,7 +78,7 @@ void main(Never? x) {
   x + (1 + 2);
 }
 ''', [
-      error(StaticWarningCode.UNCHECKED_USE_OF_NULLABLE_VALUE, 24, 1),
+      error(CompileTimeErrorCode.UNCHECKED_USE_OF_NULLABLE_VALUE, 24, 1),
     ]);
 
     assertBinaryExpression(
@@ -132,7 +122,7 @@ void main(Never? x) {
   x();
 }
 ''', [
-      error(StaticWarningCode.UNCHECKED_USE_OF_NULLABLE_VALUE, 24, 1),
+      error(CompileTimeErrorCode.UNCHECKED_USE_OF_NULLABLE_VALUE, 24, 1),
     ]);
   }
 
@@ -200,8 +190,8 @@ void main(Never? x) {
   x[0];
 }
 ''', [
-      error(StaticWarningCode.UNCHECKED_USE_OF_NULLABLE_VALUE, 24, 1),
-      error(StaticTypeWarningCode.UNDEFINED_OPERATOR, 25, 3),
+      error(CompileTimeErrorCode.UNCHECKED_USE_OF_NULLABLE_VALUE, 24, 1),
+      error(CompileTimeErrorCode.UNDEFINED_OPERATOR, 25, 3),
     ]);
 
     assertIndexExpression(
@@ -218,9 +208,9 @@ void main(Never? x) {
   x[0] += 1 + 2;
 }
 ''', [
-      error(StaticWarningCode.UNCHECKED_USE_OF_NULLABLE_VALUE, 24, 1),
-      error(StaticTypeWarningCode.UNDEFINED_OPERATOR, 25, 3),
-      error(StaticTypeWarningCode.UNDEFINED_OPERATOR, 25, 3),
+      error(CompileTimeErrorCode.UNCHECKED_USE_OF_NULLABLE_VALUE, 24, 1),
+      error(CompileTimeErrorCode.UNDEFINED_OPERATOR, 25, 3),
+      error(CompileTimeErrorCode.UNDEFINED_OPERATOR, 25, 3),
     ]);
 
     assertIndexExpression(
@@ -239,8 +229,8 @@ void main(Never? x) {
   x[0] = 1 + 2;
 }
 ''', [
-      error(StaticWarningCode.UNCHECKED_USE_OF_NULLABLE_VALUE, 24, 1),
-      error(StaticTypeWarningCode.UNDEFINED_OPERATOR, 25, 3),
+      error(CompileTimeErrorCode.UNCHECKED_USE_OF_NULLABLE_VALUE, 24, 1),
+      error(CompileTimeErrorCode.UNDEFINED_OPERATOR, 25, 3),
     ]);
 
     assertIndexExpression(
@@ -345,7 +335,7 @@ void main(Never? x) {
   x++;
 }
 ''', [
-      error(StaticWarningCode.UNCHECKED_USE_OF_NULLABLE_VALUE, 24, 1),
+      error(CompileTimeErrorCode.UNCHECKED_USE_OF_NULLABLE_VALUE, 24, 1),
     ]);
 
     assertPostfixExpression(
@@ -378,7 +368,7 @@ void main(Never? x) {
   ++x;
 }
 ''', [
-      error(StaticWarningCode.UNCHECKED_USE_OF_NULLABLE_VALUE, 26, 1),
+      error(CompileTimeErrorCode.UNCHECKED_USE_OF_NULLABLE_VALUE, 26, 1),
     ]);
 
     assertPrefixExpression(
@@ -480,7 +470,7 @@ void main(Never? x) {
   x.foo;
 }
 ''', [
-      error(StaticWarningCode.UNCHECKED_USE_OF_NULLABLE_VALUE, 24, 1),
+      error(CompileTimeErrorCode.UNCHECKED_USE_OF_NULLABLE_VALUE, 24, 1),
     ]);
 
     assertSimpleIdentifier(
@@ -546,7 +536,7 @@ void main() {
   (throw '') + (1 + 2);
 }
 ''', [
-      error(StaticTypeWarningCode.UNDEFINED_OPERATOR, 27, 1),
+      error(CompileTimeErrorCode.UNDEFINED_OPERATOR, 27, 1),
     ]);
 
     assertBinaryExpression(

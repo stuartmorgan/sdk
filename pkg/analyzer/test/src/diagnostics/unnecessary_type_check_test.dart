@@ -2,19 +2,18 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
-import 'package:analyzer/dart/analysis/features.dart';
 import 'package:analyzer/src/dart/error/hint_codes.dart';
-import 'package:analyzer/src/generated/engine.dart';
 import 'package:test_reflective_loader/test_reflective_loader.dart';
 
 import '../dart/resolution/driver_resolution.dart';
+import '../dart/resolution/with_null_safety_mixin.dart';
 
 main() {
   defineReflectiveSuite(() {
     defineReflectiveTests(UnnecessaryTypeCheckFalseTest);
-    defineReflectiveTests(UnnecessaryTypeCheckFalseWithNnbdTest);
+    defineReflectiveTests(UnnecessaryTypeCheckFalseWithNullSafetyTest);
     defineReflectiveTests(UnnecessaryTypeCheckTrueTest);
-    defineReflectiveTests(UnnecessaryTypeCheckTrueWithNnbdTest);
+    defineReflectiveTests(UnnecessaryTypeCheckTrueWithNullSafetyTest);
   });
 }
 
@@ -50,13 +49,8 @@ void f<T>(T a) {
 }
 
 @reflectiveTest
-class UnnecessaryTypeCheckFalseWithNnbdTest
-    extends UnnecessaryTypeCheckFalseTest {
-  @override
-  AnalysisOptionsImpl get analysisOptions => AnalysisOptionsImpl()
-    ..contextFeatures = FeatureSet.forTesting(
-        sdkVersion: '2.3.0', additionalFeatures: [Feature.non_nullable]);
-
+class UnnecessaryTypeCheckFalseWithNullSafetyTest
+    extends UnnecessaryTypeCheckFalseTest with WithNullSafetyMixin {
   @override
   test_type_not_object() async {
     await assertNoErrorsInCode(r'''
@@ -109,13 +103,8 @@ void f<T>(T a) {
 }
 
 @reflectiveTest
-class UnnecessaryTypeCheckTrueWithNnbdTest
-    extends UnnecessaryTypeCheckTrueTest {
-  @override
-  AnalysisOptionsImpl get analysisOptions => AnalysisOptionsImpl()
-    ..contextFeatures = FeatureSet.forTesting(
-        sdkVersion: '2.3.0', additionalFeatures: [Feature.non_nullable]);
-
+class UnnecessaryTypeCheckTrueWithNullSafetyTest
+    extends UnnecessaryTypeCheckTrueTest with WithNullSafetyMixin {
   @override
   test_type_is_object() async {
     await assertNoErrorsInCode(r'''

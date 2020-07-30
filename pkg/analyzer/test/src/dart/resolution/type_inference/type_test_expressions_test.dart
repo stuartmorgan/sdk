@@ -2,18 +2,17 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
-import 'package:analyzer/dart/analysis/features.dart';
-import 'package:analyzer/src/generated/engine.dart';
 import 'package:test_reflective_loader/test_reflective_loader.dart';
 
 import '../driver_resolution.dart';
+import '../with_null_safety_mixin.dart';
 
 main() {
   defineReflectiveSuite(() {
     defineReflectiveTests(IsNotTest);
-    defineReflectiveTests(IsNotWithNnbdTest);
+    defineReflectiveTests(IsNotWithNullSafetyTest);
     defineReflectiveTests(IsTest);
-    defineReflectiveTests(IsWithNnbdTest);
+    defineReflectiveTests(IsWithNullSafetyTest);
   });
 }
 
@@ -31,15 +30,7 @@ void f(Object a) {
 }
 
 @reflectiveTest
-class IsNotWithNnbdTest extends IsNotTest {
-  @override
-  AnalysisOptionsImpl get analysisOptions => AnalysisOptionsImpl()
-    ..contextFeatures = FeatureSet.forTesting(
-        sdkVersion: '2.3.0', additionalFeatures: [Feature.non_nullable]);
-
-  @override
-  bool get typeToStringWithNullability => true;
-}
+class IsNotWithNullSafetyTest extends IsNotTest with WithNullSafetyMixin {}
 
 @reflectiveTest
 class IsTest extends DriverResolutionTest {
@@ -55,12 +46,4 @@ void f(Object a) {
 }
 
 @reflectiveTest
-class IsWithNnbdTest extends IsTest {
-  @override
-  AnalysisOptionsImpl get analysisOptions => AnalysisOptionsImpl()
-    ..contextFeatures = FeatureSet.forTesting(
-        sdkVersion: '2.3.0', additionalFeatures: [Feature.non_nullable]);
-
-  @override
-  bool get typeToStringWithNullability => true;
-}
+class IsWithNullSafetyTest extends IsTest with WithNullSafetyMixin {}

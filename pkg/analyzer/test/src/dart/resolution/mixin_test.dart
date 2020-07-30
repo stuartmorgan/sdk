@@ -300,7 +300,7 @@ mixin M {
   final int f;
 }
 ''', [
-      error(StaticWarningCode.FINAL_NOT_INITIALIZED, 22, 1),
+      error(CompileTimeErrorCode.FINAL_NOT_INITIALIZED, 22, 1),
     ]);
   }
 
@@ -958,7 +958,7 @@ mixin M on A {
   }
 }
 ''', [
-      error(StaticTypeWarningCode.UNDEFINED_SUPER_METHOD, 52, 3),
+      error(CompileTimeErrorCode.UNDEFINED_SUPER_METHOD, 52, 3),
     ]);
 
     var invocation = findNode.methodInvocation('foo(42)');

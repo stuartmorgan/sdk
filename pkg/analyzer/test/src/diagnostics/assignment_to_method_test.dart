@@ -29,8 +29,8 @@ f(C c) {
   c.foo = 0;
 }
 ''', [
-      error(StaticWarningCode.ASSIGNMENT_TO_METHOD, 87, 5),
-      error(StaticTypeWarningCode.INVALID_ASSIGNMENT, 95, 1),
+      error(CompileTimeErrorCode.ASSIGNMENT_TO_METHOD, 87, 5),
+      error(CompileTimeErrorCode.INVALID_ASSIGNMENT, 95, 1),
     ]);
   }
 
@@ -42,7 +42,7 @@ class A {
 f(A a) {
   a.m = () {};
 }''', [
-      error(StaticWarningCode.ASSIGNMENT_TO_METHOD, 32, 3),
+      error(CompileTimeErrorCode.ASSIGNMENT_TO_METHOD, 32, 3),
     ]);
   }
 
@@ -60,8 +60,8 @@ extension E on C {
   }
 }
 ''', [
-      error(StaticWarningCode.ASSIGNMENT_TO_METHOD, 86, 8),
-      error(StaticTypeWarningCode.INVALID_ASSIGNMENT, 97, 1),
+      error(CompileTimeErrorCode.ASSIGNMENT_TO_METHOD, 86, 8),
+      error(CompileTimeErrorCode.INVALID_ASSIGNMENT, 97, 1),
     ]);
   }
 }

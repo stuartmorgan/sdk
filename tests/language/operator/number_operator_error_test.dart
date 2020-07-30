@@ -30,120 +30,120 @@ void
 
   /* indent */ i + "string";
   //               ^^^^^^^^
-  // [analyzer] STATIC_WARNING.ARGUMENT_TYPE_NOT_ASSIGNABLE
+  // [analyzer] COMPILE_TIME_ERROR.ARGUMENT_TYPE_NOT_ASSIGNABLE
   // [cfe] A value of type 'String' can't be assigned to a variable of type 'num'.
 
   i += d;
   //   ^
-  // [analyzer] STATIC_TYPE_WARNING.INVALID_ASSIGNMENT
+  // [analyzer] COMPILE_TIME_ERROR.INVALID_ASSIGNMENT
   //^^
   // [cfe] A value of type 'double' can't be assigned to a variable of type 'int'.
 
   i += n;
   //   ^
-  // [analyzer] STATIC_TYPE_WARNING.INVALID_ASSIGNMENT
+  // [analyzer] COMPILE_TIME_ERROR.INVALID_ASSIGNMENT
   //^^
   // [cfe] A value of type 'num' can't be assigned to a variable of type 'int'.
 
   i += never;
   //   ^^^^^
-  // [analyzer] STATIC_TYPE_WARNING.INVALID_ASSIGNMENT
+  // [analyzer] COMPILE_TIME_ERROR.INVALID_ASSIGNMENT
   //^^
   // [cfe] A value of type 'num' can't be assigned to a variable of type 'int'.
 
   i += dyn; // type of `i + dyn` is `num`, not assignable to `int`.
   //   ^^^
-  // [analyzer] STATIC_TYPE_WARNING.INVALID_ASSIGNMENT
+  // [analyzer] COMPILE_TIME_ERROR.INVALID_ASSIGNMENT
   //^^
   // [cfe] A value of type 'num' can't be assigned to a variable of type 'int'.
 
   ti += i; // Type of expression is `int`, not `I`.
   //    ^
-  // [analyzer] STATIC_TYPE_WARNING.INVALID_ASSIGNMENT
+  // [analyzer] COMPILE_TIME_ERROR.INVALID_ASSIGNMENT
   // ^^
   // [cfe] A value of type 'int' can't be assigned to a variable of type 'I'.
 
   ti += d; // Type of expression is `num`, not `I`.
   //    ^
-  // [analyzer] STATIC_TYPE_WARNING.INVALID_ASSIGNMENT
+  // [analyzer] COMPILE_TIME_ERROR.INVALID_ASSIGNMENT
   // ^^
   // [cfe] A value of type 'double' can't be assigned to a variable of type 'I'.
 
   ti += n; // Type of expression is `num`, not `I`.
   //    ^
-  // [analyzer] STATIC_TYPE_WARNING.INVALID_ASSIGNMENT
+  // [analyzer] COMPILE_TIME_ERROR.INVALID_ASSIGNMENT
   // ^^
   // [cfe] A value of type 'num' can't be assigned to a variable of type 'I'.
 
   ti += never; // Type of expression is `num`, not `I`.
   //    ^^^^^
-  // [analyzer] STATIC_TYPE_WARNING.INVALID_ASSIGNMENT
+  // [analyzer] COMPILE_TIME_ERROR.INVALID_ASSIGNMENT
   // ^^
   // [cfe] A value of type 'num' can't be assigned to a variable of type 'I'.
 
   ti += dyn; // type of `i + dyn` is `num`, not assignable to `int`.
   //    ^^^
-  // [analyzer] STATIC_TYPE_WARNING.INVALID_ASSIGNMENT
+  // [analyzer] COMPILE_TIME_ERROR.INVALID_ASSIGNMENT
   // ^^
   // [cfe] A value of type 'num' can't be assigned to a variable of type 'I'.
 
   td += i; // Type of expression is `double`, not `D`.
   //    ^
-  // [analyzer] STATIC_TYPE_WARNING.INVALID_ASSIGNMENT
+  // [analyzer] COMPILE_TIME_ERROR.INVALID_ASSIGNMENT
   // ^^
   // [cfe] A value of type 'double' can't be assigned to a variable of type 'D'.
 
   td += d; // Type of expression is `double`, not `D`.
   //    ^
-  // [analyzer] STATIC_TYPE_WARNING.INVALID_ASSIGNMENT
+  // [analyzer] COMPILE_TIME_ERROR.INVALID_ASSIGNMENT
   // ^^
   // [cfe] A value of type 'double' can't be assigned to a variable of type 'D'.
 
   td += n; // Type of expression is `double`, not `D`.
   //    ^
-  // [analyzer] STATIC_TYPE_WARNING.INVALID_ASSIGNMENT
+  // [analyzer] COMPILE_TIME_ERROR.INVALID_ASSIGNMENT
   // ^^
   // [cfe] A value of type 'double' can't be assigned to a variable of type 'D'.
 
   td += dyn; // Type of expression is `double`, not `D`.
   //    ^^^
-  // [analyzer] STATIC_TYPE_WARNING.INVALID_ASSIGNMENT
+  // [analyzer] COMPILE_TIME_ERROR.INVALID_ASSIGNMENT
   // ^^
   // [cfe] A value of type 'double' can't be assigned to a variable of type 'D'.
 
   td += never; // Type of expression is `double`, not `D`.
   //    ^^^^^
-  // [analyzer] STATIC_TYPE_WARNING.INVALID_ASSIGNMENT
+  // [analyzer] COMPILE_TIME_ERROR.INVALID_ASSIGNMENT
   // ^^
   // [cfe] A value of type 'double' can't be assigned to a variable of type 'D'.
 
   tn += i; // Type of expression is `num`, not `N`.
   //    ^
-  // [analyzer] STATIC_TYPE_WARNING.INVALID_ASSIGNMENT
+  // [analyzer] COMPILE_TIME_ERROR.INVALID_ASSIGNMENT
   // ^^
   // [cfe] A value of type 'num' can't be assigned to a variable of type 'N'.
 
   tn += d; // Type of expression is `num`, not `N`.
   //    ^
-  // [analyzer] STATIC_TYPE_WARNING.INVALID_ASSIGNMENT
+  // [analyzer] COMPILE_TIME_ERROR.INVALID_ASSIGNMENT
   // ^^
   // [cfe] A value of type 'num' can't be assigned to a variable of type 'N'.
 
   tn += n; // Type of expression is `num`, not `N`.
   //    ^
-  // [analyzer] STATIC_TYPE_WARNING.INVALID_ASSIGNMENT
+  // [analyzer] COMPILE_TIME_ERROR.INVALID_ASSIGNMENT
   // ^^
   // [cfe] A value of type 'num' can't be assigned to a variable of type 'N'.
 
   tn += dyn; // Type of expression is `num`, not `N`.
   //    ^^^
-  // [analyzer] STATIC_TYPE_WARNING.INVALID_ASSIGNMENT
+  // [analyzer] COMPILE_TIME_ERROR.INVALID_ASSIGNMENT
   // ^^
   // [cfe] A value of type 'num' can't be assigned to a variable of type 'N'.
 
   tn += never; // Type of expression is `num`, not `N`.
   //    ^^^^^
-  // [analyzer] STATIC_TYPE_WARNING.INVALID_ASSIGNMENT
+  // [analyzer] COMPILE_TIME_ERROR.INVALID_ASSIGNMENT
   // ^^
   // [cfe] A value of type 'num' can't be assigned to a variable of type 'N'.
 
@@ -153,7 +153,7 @@ void
     oi1 + d; // Valid
     oi1 += d;
     //     ^
-    // [analyzer] STATIC_TYPE_WARNING.INVALID_ASSIGNMENT
+    // [analyzer] COMPILE_TIME_ERROR.INVALID_ASSIGNMENT
     //  ^^
     // [cfe] A value of type 'double' can't be assigned to a variable of type 'O'.
   }
@@ -164,7 +164,7 @@ void
     oi2 + n; // Valid
     oi2 += n;
     //     ^
-    // [analyzer] STATIC_TYPE_WARNING.INVALID_ASSIGNMENT
+    // [analyzer] COMPILE_TIME_ERROR.INVALID_ASSIGNMENT
     //  ^^
     // [cfe] A value of type 'num' can't be assigned to a variable of type 'O'.
   }
@@ -175,7 +175,7 @@ void
     oi3 + dyn; // Valid
     oi3 += dyn;
     //     ^^^
-    // [analyzer] STATIC_TYPE_WARNING.INVALID_ASSIGNMENT
+    // [analyzer] COMPILE_TIME_ERROR.INVALID_ASSIGNMENT
     //  ^^
     // [cfe] A value of type 'num' can't be assigned to a variable of type 'O'.
   }
@@ -186,38 +186,38 @@ void
     oi4 + never; // Valid.
     oi4 += never;
     //     ^^^^^
-    // [analyzer] STATIC_TYPE_WARNING.INVALID_ASSIGNMENT
+    // [analyzer] COMPILE_TIME_ERROR.INVALID_ASSIGNMENT
     //  ^^
     // [cfe] A value of type 'num' can't be assigned to a variable of type 'O'.
   }
 
   context<D>(i + td); // Type of expression is `double`, not `D`.
   //         ^^^^^^
-  // [analyzer] STATIC_WARNING.ARGUMENT_TYPE_NOT_ASSIGNABLE
+  // [analyzer] COMPILE_TIME_ERROR.ARGUMENT_TYPE_NOT_ASSIGNABLE
   //           ^
   // [cfe] A value of type 'double' can't be assigned to a variable of type 'D'.
 
   context<D>(n + td); // Type of expression is `double`, not `D`.
   //         ^^^^^^
-  // [analyzer] STATIC_WARNING.ARGUMENT_TYPE_NOT_ASSIGNABLE
+  // [analyzer] COMPILE_TIME_ERROR.ARGUMENT_TYPE_NOT_ASSIGNABLE
   //           ^
   // [cfe] A value of type 'double' can't be assigned to a variable of type 'D'.
 
   context<D>(1.0 + td); // Type of expression is `double`, not `D`.
   //         ^^^^^^^^
-  // [analyzer] STATIC_WARNING.ARGUMENT_TYPE_NOT_ASSIGNABLE
+  // [analyzer] COMPILE_TIME_ERROR.ARGUMENT_TYPE_NOT_ASSIGNABLE
   //             ^
   // [cfe] The argument type 'double' can't be assigned to the parameter type 'D'.
 
   tn += n; // Type of expression is `num`, not `N`.
   //    ^
-  // [analyzer] STATIC_TYPE_WARNING.INVALID_ASSIGNMENT
+  // [analyzer] COMPILE_TIME_ERROR.INVALID_ASSIGNMENT
   // ^^
   // [cfe] A value of type 'num' can't be assigned to a variable of type 'N'.
 
   tn += dyn;
   //    ^^^
-  // [analyzer] STATIC_TYPE_WARNING.INVALID_ASSIGNMENT
+  // [analyzer] COMPILE_TIME_ERROR.INVALID_ASSIGNMENT
   // ^^
   // [cfe] A value of type 'num' can't be assigned to a variable of type 'N'.
 
@@ -226,7 +226,7 @@ void
     // Promote on1 to O&num.
     on1 += n; // Type of expression is `num`, not `N` or `O`.
     //     ^
-    // [analyzer] STATIC_TYPE_WARNING.INVALID_ASSIGNMENT
+    // [analyzer] COMPILE_TIME_ERROR.INVALID_ASSIGNMENT
     //  ^^
     // [cfe] A value of type 'num' can't be assigned to a variable of type 'O'.
   }
@@ -236,7 +236,7 @@ void
     // Promote on2 to O&num.
     on2 += dyn; // Type of expression is `num`, not `N` or `O`.
     //     ^^^
-    // [analyzer] STATIC_TYPE_WARNING.INVALID_ASSIGNMENT
+    // [analyzer] COMPILE_TIME_ERROR.INVALID_ASSIGNMENT
     //  ^^
     // [cfe] A value of type 'num' can't be assigned to a variable of type 'O'.
   }

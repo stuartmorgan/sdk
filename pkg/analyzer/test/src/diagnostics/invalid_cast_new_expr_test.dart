@@ -25,8 +25,8 @@ class B extends A {
   const B();
 }
 ''', [
-      error(StaticWarningCode.LIST_ELEMENT_TYPE_NOT_ASSIGNABLE, 14, 3),
-      error(StrongModeCode.INVALID_CAST_NEW_EXPR, 14, 3),
+      error(CompileTimeErrorCode.LIST_ELEMENT_TYPE_NOT_ASSIGNABLE, 14, 3),
+      error(CompileTimeErrorCode.INVALID_CAST_NEW_EXPR, 14, 3),
     ]);
   }
 
@@ -40,7 +40,7 @@ class B extends A {
   const B();
 }
 ''', [
-      error(StrongModeCode.INVALID_CAST_NEW_EXPR, 12, 3),
+      error(CompileTimeErrorCode.INVALID_CAST_NEW_EXPR, 12, 3),
     ]);
   }
 
@@ -54,8 +54,8 @@ class B extends A {
   const B();
 }
 ''', [
-      error(StaticWarningCode.SET_ELEMENT_TYPE_NOT_ASSIGNABLE, 14, 3),
-      error(StrongModeCode.INVALID_CAST_NEW_EXPR, 14, 3),
+      error(CompileTimeErrorCode.SET_ELEMENT_TYPE_NOT_ASSIGNABLE, 14, 3),
+      error(CompileTimeErrorCode.INVALID_CAST_NEW_EXPR, 14, 3),
     ]);
   }
 
@@ -69,7 +69,7 @@ class B extends A {
   const B();
 }
 ''', [
-      error(StrongModeCode.INVALID_CAST_NEW_EXPR, 12, 3),
+      error(CompileTimeErrorCode.INVALID_CAST_NEW_EXPR, 12, 3),
     ]);
   }
 }

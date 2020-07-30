@@ -2,18 +2,17 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
-import 'package:analyzer/dart/analysis/features.dart';
 import 'package:analyzer/src/error/codes.dart';
-import 'package:analyzer/src/generated/engine.dart';
 import 'package:analyzer/src/test_utilities/find_element.dart';
 import 'package:test_reflective_loader/test_reflective_loader.dart';
 
 import 'driver_resolution.dart';
+import 'with_null_safety_mixin.dart';
 
 main() {
   defineReflectiveSuite(() {
     defineReflectiveTests(TypeNameResolutionTest);
-    defineReflectiveTests(TypeNameResolutionWithNnbdTest);
+    defineReflectiveTests(TypeNameResolutionWithNullSafetyTest);
   });
 }
 
@@ -199,7 +198,7 @@ main() {
   new math.A();
 }
 ''', [
-      error(StaticWarningCode.NEW_WITH_NON_TYPE, 49, 1),
+      error(CompileTimeErrorCode.NEW_WITH_NON_TYPE, 49, 1),
     ]);
 
     assertTypeName(
@@ -232,13 +231,47 @@ main() {
   new A();
 }
 ''', [
-      error(StaticWarningCode.NEW_WITH_NON_TYPE, 15, 1),
+      error(CompileTimeErrorCode.NEW_WITH_NON_TYPE, 15, 1),
     ]);
 
     assertTypeName(
       findNode.typeName('A();'),
       null,
       'dynamic',
+    );
+  }
+
+  test_invalid_prefixedIdentifier_instanceCreation() async {
+    await assertErrorsInCode(r'''
+void f() {
+  new int.double.other();
+}
+''', [
+      error(CompileTimeErrorCode.NEW_WITH_NON_TYPE, 17, 10),
+    ]);
+
+    assertTypeName(
+      findNode.typeName('int.double'),
+      null,
+      'dynamic',
+      expectedPrefix: intElement,
+    );
+  }
+
+  test_invalid_prefixedIdentifier_literal() async {
+    await assertErrorsInCode(r'''
+void f() {
+  0 as int.double;
+}
+''', [
+      error(CompileTimeErrorCode.NOT_A_TYPE, 18, 10),
+    ]);
+
+    assertTypeName(
+      findNode.typeName('int.double'),
+      null,
+      'dynamic',
+      expectedPrefix: intElement,
     );
   }
 
@@ -256,12 +289,8 @@ f(Never a) {}
 }
 
 @reflectiveTest
-class TypeNameResolutionWithNnbdTest extends TypeNameResolutionTest {
-  @override
-  AnalysisOptionsImpl get analysisOptions => AnalysisOptionsImpl()
-    ..contextFeatures = FeatureSet.forTesting(
-        sdkVersion: '2.7.0', additionalFeatures: [Feature.non_nullable]);
-
+class TypeNameResolutionWithNullSafetyTest extends TypeNameResolutionTest
+    with WithNullSafetyMixin {
   ImportFindElement get import_a {
     return findElement.importFind('package:test/a.dart');
   }

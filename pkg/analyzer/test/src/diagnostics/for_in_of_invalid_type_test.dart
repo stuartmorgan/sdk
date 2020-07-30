@@ -2,17 +2,16 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
-import 'package:analyzer/dart/analysis/features.dart';
 import 'package:analyzer/src/error/codes.dart';
-import 'package:analyzer/src/generated/engine.dart';
 import 'package:test_reflective_loader/test_reflective_loader.dart';
 
 import '../dart/resolution/driver_resolution.dart';
+import '../dart/resolution/with_null_safety_mixin.dart';
 
 main() {
   defineReflectiveSuite(() {
     defineReflectiveTests(ForInOfInvalidTypeTest);
-    defineReflectiveTests(ForInOfInvalidTypeWithNnbdTest);
+    defineReflectiveTests(ForInOfInvalidTypeWithNullSafetyTest);
   });
 }
 
@@ -36,7 +35,7 @@ f(bool e) async {
   }
 }
 ''', [
-      error(StaticTypeWarningCode.FOR_IN_OF_INVALID_TYPE, 41, 1),
+      error(CompileTimeErrorCode.FOR_IN_OF_INVALID_TYPE, 41, 1),
     ]);
   }
 
@@ -58,18 +57,14 @@ f(bool e) {
   }
 }
 ''', [
-      error(StaticTypeWarningCode.FOR_IN_OF_INVALID_TYPE, 29, 1),
+      error(CompileTimeErrorCode.FOR_IN_OF_INVALID_TYPE, 29, 1),
     ]);
   }
 }
 
 @reflectiveTest
-class ForInOfInvalidTypeWithNnbdTest extends ForInOfInvalidTypeTest {
-  @override
-  AnalysisOptionsImpl get analysisOptions => AnalysisOptionsImpl()
-    ..contextFeatures = FeatureSet.forTesting(
-        sdkVersion: '2.3.0', additionalFeatures: [Feature.non_nullable]);
-
+class ForInOfInvalidTypeWithNullSafetyTest extends ForInOfInvalidTypeTest
+    with WithNullSafetyMixin {
   test_awaitForIn_never() async {
     await assertErrorsInCode('''
 f(Never e) async {

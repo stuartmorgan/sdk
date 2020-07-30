@@ -18,7 +18,18 @@ class _HtmlWebSocket implements CommonWebSocket {
 
   void connect(String address, void onOpen(), void onMessage(dynamic data),
       void onError(), void onClose()) {
-    _webSocket = new WebSocket(address);
+    // The VM service will attempt to redirect our websocket connection request
+    // to DDS, but the dart:html WebSocket doesn't follow redirects. If the
+    // 'implicit-redirect' protocol is provided, the VM service will manually
+    // forward traffic to DDS.
+
+    // TODO(bkonyi): uncomment when DDS is re-enabled.
+    // See https://github.com/dart-lang/sdk/issues/42727
+    // const protocols = ['implicit-redirect'];
+    _webSocket = new WebSocket(
+      address,
+      // protocols,
+    );
     _webSocket.onClose.listen((CloseEvent) => onClose());
     _webSocket.onError.listen((Event) => onError());
     _webSocket.onOpen.listen((Event) => onOpen());

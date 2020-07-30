@@ -55,6 +55,15 @@ const MessageCode messageAbstractExtensionField = const MessageCode(
     tip: r"""Try removing the 'abstract' keyword.""");
 
 // DO NOT EDIT. THIS FILE IS GENERATED. SEE TOP OF FILE.
+const Code<Null> codeAbstractExternalField = messageAbstractExternalField;
+
+// DO NOT EDIT. THIS FILE IS GENERATED. SEE TOP OF FILE.
+const MessageCode messageAbstractExternalField = const MessageCode(
+    "AbstractExternalField",
+    message: r"""Fields can't be declared both 'abstract' and 'external'.""",
+    tip: r"""Try removing the 'abstract' or 'external' keyword.""");
+
+// DO NOT EDIT. THIS FILE IS GENERATED. SEE TOP OF FILE.
 const Code<Null> codeAbstractFieldConstructorInitializer =
     messageAbstractFieldConstructorInitializer;
 
@@ -1300,6 +1309,14 @@ Message _withArgumentsConstEvalNonConstantVariableGet(String string) {
 }
 
 // DO NOT EDIT. THIS FILE IS GENERATED. SEE TOP OF FILE.
+const Code<Null> codeConstEvalNonNull = messageConstEvalNonNull;
+
+// DO NOT EDIT. THIS FILE IS GENERATED. SEE TOP OF FILE.
+const MessageCode messageConstEvalNonNull = const MessageCode(
+    "ConstEvalNonNull",
+    message: r"""Constant expression must be non-null.""");
+
+// DO NOT EDIT. THIS FILE IS GENERATED. SEE TOP OF FILE.
 const Code<Null> codeConstEvalNotListOrSetInSpread =
     messageConstEvalNotListOrSetInSpread;
 
@@ -2291,95 +2308,6 @@ Message _withArgumentsDuplicatedImportInType(String name, Uri uri_, Uri uri2_) {
 }
 
 // DO NOT EDIT. THIS FILE IS GENERATED. SEE TOP OF FILE.
-const Template<Message Function(String name)> templateDuplicatedLibraryExport =
-    const Template<Message Function(String name)>(
-        messageTemplate:
-            r"""A library with name '#name' is exported more than once.""",
-        withArguments: _withArgumentsDuplicatedLibraryExport);
-
-// DO NOT EDIT. THIS FILE IS GENERATED. SEE TOP OF FILE.
-const Code<Message Function(String name)> codeDuplicatedLibraryExport =
-    const Code<Message Function(String name)>(
-        "DuplicatedLibraryExport", templateDuplicatedLibraryExport,
-        analyzerCodes: <String>["EXPORT_DUPLICATED_LIBRARY_NAMED"]);
-
-// DO NOT EDIT. THIS FILE IS GENERATED. SEE TOP OF FILE.
-Message _withArgumentsDuplicatedLibraryExport(String name) {
-  if (name.isEmpty) throw 'No name provided';
-  name = demangleMixinApplicationName(name);
-  return new Message(codeDuplicatedLibraryExport,
-      message: """A library with name '${name}' is exported more than once.""",
-      arguments: {'name': name});
-}
-
-// DO NOT EDIT. THIS FILE IS GENERATED. SEE TOP OF FILE.
-const Template<Message Function(String name)>
-    templateDuplicatedLibraryExportContext =
-    const Template<Message Function(String name)>(
-        messageTemplate: r"""'#name' is also exported here.""",
-        withArguments: _withArgumentsDuplicatedLibraryExportContext);
-
-// DO NOT EDIT. THIS FILE IS GENERATED. SEE TOP OF FILE.
-const Code<Message Function(String name)> codeDuplicatedLibraryExportContext =
-    const Code<Message Function(String name)>("DuplicatedLibraryExportContext",
-        templateDuplicatedLibraryExportContext,
-        severity: Severity.context);
-
-// DO NOT EDIT. THIS FILE IS GENERATED. SEE TOP OF FILE.
-Message _withArgumentsDuplicatedLibraryExportContext(String name) {
-  if (name.isEmpty) throw 'No name provided';
-  name = demangleMixinApplicationName(name);
-  return new Message(codeDuplicatedLibraryExportContext,
-      message: """'${name}' is also exported here.""",
-      arguments: {'name': name});
-}
-
-// DO NOT EDIT. THIS FILE IS GENERATED. SEE TOP OF FILE.
-const Template<Message Function(String name)> templateDuplicatedLibraryImport =
-    const Template<Message Function(String name)>(
-        messageTemplate:
-            r"""A library with name '#name' is imported more than once.""",
-        withArguments: _withArgumentsDuplicatedLibraryImport);
-
-// DO NOT EDIT. THIS FILE IS GENERATED. SEE TOP OF FILE.
-const Code<Message Function(String name)> codeDuplicatedLibraryImport =
-    const Code<Message Function(String name)>(
-        "DuplicatedLibraryImport", templateDuplicatedLibraryImport,
-        analyzerCodes: <String>["IMPORT_DUPLICATED_LIBRARY_NAMED"],
-        severity: Severity.warning);
-
-// DO NOT EDIT. THIS FILE IS GENERATED. SEE TOP OF FILE.
-Message _withArgumentsDuplicatedLibraryImport(String name) {
-  if (name.isEmpty) throw 'No name provided';
-  name = demangleMixinApplicationName(name);
-  return new Message(codeDuplicatedLibraryImport,
-      message: """A library with name '${name}' is imported more than once.""",
-      arguments: {'name': name});
-}
-
-// DO NOT EDIT. THIS FILE IS GENERATED. SEE TOP OF FILE.
-const Template<Message Function(String name)>
-    templateDuplicatedLibraryImportContext =
-    const Template<Message Function(String name)>(
-        messageTemplate: r"""'#name' is also imported here.""",
-        withArguments: _withArgumentsDuplicatedLibraryImportContext);
-
-// DO NOT EDIT. THIS FILE IS GENERATED. SEE TOP OF FILE.
-const Code<Message Function(String name)> codeDuplicatedLibraryImportContext =
-    const Code<Message Function(String name)>("DuplicatedLibraryImportContext",
-        templateDuplicatedLibraryImportContext,
-        severity: Severity.context);
-
-// DO NOT EDIT. THIS FILE IS GENERATED. SEE TOP OF FILE.
-Message _withArgumentsDuplicatedLibraryImportContext(String name) {
-  if (name.isEmpty) throw 'No name provided';
-  name = demangleMixinApplicationName(name);
-  return new Message(codeDuplicatedLibraryImportContext,
-      message: """'${name}' is also imported here.""",
-      arguments: {'name': name});
-}
-
-// DO NOT EDIT. THIS FILE IS GENERATED. SEE TOP OF FILE.
 const Template<Message Function(Token token)> templateDuplicatedModifier =
     const Template<Message Function(Token token)>(
         messageTemplate: r"""The modifier '#lexeme' was already specified.""",
@@ -3316,6 +3244,35 @@ const MessageCode messageExternalField = const MessageCode("ExternalField",
     message: r"""Fields can't be declared to be 'external'.""",
     tip:
         r"""Try removing the keyword 'external', or replacing the field by an external getter and/or setter.""");
+
+// DO NOT EDIT. THIS FILE IS GENERATED. SEE TOP OF FILE.
+const Code<Null> codeExternalFieldConstructorInitializer =
+    messageExternalFieldConstructorInitializer;
+
+// DO NOT EDIT. THIS FILE IS GENERATED. SEE TOP OF FILE.
+const MessageCode messageExternalFieldConstructorInitializer = const MessageCode(
+    "ExternalFieldConstructorInitializer",
+    message: r"""External fields cannot have initializers.""",
+    tip:
+        r"""Try removing the field initializer or the 'external' keyword from the field declaration.""");
+
+// DO NOT EDIT. THIS FILE IS GENERATED. SEE TOP OF FILE.
+const Code<Null> codeExternalFieldInitializer = messageExternalFieldInitializer;
+
+// DO NOT EDIT. THIS FILE IS GENERATED. SEE TOP OF FILE.
+const MessageCode messageExternalFieldInitializer = const MessageCode(
+    "ExternalFieldInitializer",
+    message: r"""External fields cannot have initializers.""",
+    tip: r"""Try removing the initializer or the 'external' keyword.""");
+
+// DO NOT EDIT. THIS FILE IS GENERATED. SEE TOP OF FILE.
+const Code<Null> codeExternalLateField = messageExternalLateField;
+
+// DO NOT EDIT. THIS FILE IS GENERATED. SEE TOP OF FILE.
+const MessageCode messageExternalLateField = const MessageCode(
+    "ExternalLateField",
+    message: r"""External fields cannot be late.""",
+    tip: r"""Try removing the 'external' or 'late' keyword.""");
 
 // DO NOT EDIT. THIS FILE IS GENERATED. SEE TOP OF FILE.
 const Code<Null> codeExternalMethodWithBody = messageExternalMethodWithBody;
@@ -6332,14 +6289,6 @@ const MessageCode messageNonInstanceTypeVariableUse = const MessageCode(
     "NonInstanceTypeVariableUse",
     analyzerCodes: <String>["TYPE_PARAMETER_REFERENCED_BY_STATIC"],
     message: r"""Can only use type variables in instance methods.""");
-
-// DO NOT EDIT. THIS FILE IS GENERATED. SEE TOP OF FILE.
-const Code<Null> codeNonNullAwareSpreadIsNull = messageNonNullAwareSpreadIsNull;
-
-// DO NOT EDIT. THIS FILE IS GENERATED. SEE TOP OF FILE.
-const MessageCode messageNonNullAwareSpreadIsNull = const MessageCode(
-    "NonNullAwareSpreadIsNull",
-    message: r"""Can't spread a value with static type Null.""");
 
 // DO NOT EDIT. THIS FILE IS GENERATED. SEE TOP OF FILE.
 const Template<Message Function(String name)>

@@ -2,19 +2,17 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
-import 'package:analyzer/dart/analysis/features.dart';
-import 'package:analyzer/src/dart/analysis/experiments.dart';
 import 'package:analyzer/src/error/codes.dart';
-import 'package:analyzer/src/generated/engine.dart';
 import 'package:test/test.dart';
 import 'package:test_reflective_loader/test_reflective_loader.dart';
 
 import '../dart/resolution/driver_resolution.dart';
+import '../dart/resolution/with_null_safety_mixin.dart';
 
 main() {
   defineReflectiveSuite(() {
     defineReflectiveTests(ArgumentTypeNotAssignableTest);
-    defineReflectiveTests(ArgumentTypeNotAssignableTest_NNBD);
+    defineReflectiveTests(ArgumentTypeNotAssignableWithNullSafetyTest);
   });
 }
 
@@ -31,7 +29,7 @@ class _A {}
 f() {
   g((_A a) {});
 }''', [
-      error(StaticWarningCode.ARGUMENT_TYPE_NOT_ASSIGNABLE, 42, 9),
+      error(CompileTimeErrorCode.ARGUMENT_TYPE_NOT_ASSIGNABLE, 42, 9),
     ]);
     // The name _A is private to the library it's defined in, so this is a type
     // mismatch. Furthermore, the error message should mention both _A and the
@@ -48,7 +46,7 @@ class A {
 @A.fromInt('0')
 main() {
 }''', [
-      error(StaticWarningCode.ARGUMENT_TYPE_NOT_ASSIGNABLE, 49, 3),
+      error(CompileTimeErrorCode.ARGUMENT_TYPE_NOT_ASSIGNABLE, 49, 3),
     ]);
   }
 
@@ -60,7 +58,7 @@ class A {
 @A('0')
 main() {
 }''', [
-      error(StaticWarningCode.ARGUMENT_TYPE_NOT_ASSIGNABLE, 33, 3),
+      error(CompileTimeErrorCode.ARGUMENT_TYPE_NOT_ASSIGNABLE, 33, 3),
     ]);
   }
 
@@ -72,7 +70,7 @@ class A {
 f(A a) {
   a + '0';
 }''', [
-      error(StaticWarningCode.ARGUMENT_TYPE_NOT_ASSIGNABLE, 50, 3),
+      error(CompileTimeErrorCode.ARGUMENT_TYPE_NOT_ASSIGNABLE, 50, 3),
     ]);
   }
 
@@ -85,7 +83,7 @@ Predicate<String> f() => (String s) => false;
 void main() {
   f().call(3);
 }''', [
-      error(StaticWarningCode.ARGUMENT_TYPE_NOT_ASSIGNABLE, 110, 1),
+      error(CompileTimeErrorCode.ARGUMENT_TYPE_NOT_ASSIGNABLE, 110, 1),
     ]);
   }
 
@@ -103,7 +101,7 @@ main() {
   A a = new A();
   a..  ma().mb(0);
 }''', [
-      error(StaticWarningCode.ARGUMENT_TYPE_NOT_ASSIGNABLE, 186, 1),
+      error(CompileTimeErrorCode.ARGUMENT_TYPE_NOT_ASSIGNABLE, 186, 1),
     ]);
   }
 
@@ -115,11 +113,8 @@ class A {
 main() {
   const A(42);
 }''', [
-      error(
-          CheckedModeCompileTimeErrorCode.CONST_CONSTRUCTOR_PARAM_TYPE_MISMATCH,
-          52,
-          2),
-      error(StaticWarningCode.ARGUMENT_TYPE_NOT_ASSIGNABLE, 52, 2),
+      error(CompileTimeErrorCode.CONST_CONSTRUCTOR_PARAM_TYPE_MISMATCH, 52, 2),
+      error(CompileTimeErrorCode.ARGUMENT_TYPE_NOT_ASSIGNABLE, 52, 2),
     ]);
   }
 
@@ -131,7 +126,7 @@ class A {
 class B extends A {
   const B() : super(42);
 }''', [
-      error(StaticWarningCode.ARGUMENT_TYPE_NOT_ASSIGNABLE, 73, 2),
+      error(CompileTimeErrorCode.ARGUMENT_TYPE_NOT_ASSIGNABLE, 73, 2),
     ]);
   }
 
@@ -162,7 +157,7 @@ void f<T>(Iterable<T> Function() g, void Function(T) h) {
 main() {
   (int x) {} ('');
 }''', [
-      error(StaticWarningCode.ARGUMENT_TYPE_NOT_ASSIGNABLE, 23, 2),
+      error(CompileTimeErrorCode.ARGUMENT_TYPE_NOT_ASSIGNABLE, 23, 2),
     ]);
   }
 
@@ -176,7 +171,7 @@ class A {
   n(void f(int i)) {}
 }
 ''', [
-      error(StaticWarningCode.ARGUMENT_TYPE_NOT_ASSIGNABLE, 31, 7),
+      error(CompileTimeErrorCode.ARGUMENT_TYPE_NOT_ASSIGNABLE, 31, 7),
     ]);
   }
 
@@ -188,7 +183,7 @@ class A {
 f(A a) {
   a['0'];
 }''', [
-      error(StaticWarningCode.ARGUMENT_TYPE_NOT_ASSIGNABLE, 60, 3),
+      error(CompileTimeErrorCode.ARGUMENT_TYPE_NOT_ASSIGNABLE, 60, 3),
     ]);
   }
 
@@ -201,7 +196,7 @@ class A {
 f(A a) {
   a['0'] += 0;
 }''', [
-      error(StaticWarningCode.ARGUMENT_TYPE_NOT_ASSIGNABLE, 103, 3),
+      error(CompileTimeErrorCode.ARGUMENT_TYPE_NOT_ASSIGNABLE, 103, 3),
     ]);
   }
 
@@ -213,7 +208,7 @@ class A {
 f(A a) {
   a['0'] = 0;
 }''', [
-      error(StaticWarningCode.ARGUMENT_TYPE_NOT_ASSIGNABLE, 65, 3),
+      error(CompileTimeErrorCode.ARGUMENT_TYPE_NOT_ASSIGNABLE, 65, 3),
     ]);
   }
 
@@ -226,7 +221,7 @@ class A {
 f(A a) {
   a['0'] += 0;
 }''', [
-      error(StaticWarningCode.ARGUMENT_TYPE_NOT_ASSIGNABLE, 103, 3),
+      error(CompileTimeErrorCode.ARGUMENT_TYPE_NOT_ASSIGNABLE, 103, 3),
     ]);
   }
 
@@ -238,7 +233,7 @@ m() {
 }
 n(int i) {}
 ''', [
-      error(StaticWarningCode.ARGUMENT_TYPE_NOT_ASSIGNABLE, 24, 1),
+      error(CompileTimeErrorCode.ARGUMENT_TYPE_NOT_ASSIGNABLE, 24, 1),
     ]);
   }
 
@@ -250,7 +245,7 @@ class A {
 f(A a) {
   a('0');
 }''', [
-      error(StaticWarningCode.ARGUMENT_TYPE_NOT_ASSIGNABLE, 42, 3),
+      error(CompileTimeErrorCode.ARGUMENT_TYPE_NOT_ASSIGNABLE, 42, 3),
     ]);
   }
 
@@ -263,7 +258,7 @@ main() {
   A a = new A();
   a('0');
 }''', [
-      error(StaticWarningCode.ARGUMENT_TYPE_NOT_ASSIGNABLE, 59, 3),
+      error(CompileTimeErrorCode.ARGUMENT_TYPE_NOT_ASSIGNABLE, 59, 3),
     ]);
   }
 
@@ -272,7 +267,7 @@ main() {
 a(b(int p)) {
   b('0');
 }''', [
-      error(StaticWarningCode.ARGUMENT_TYPE_NOT_ASSIGNABLE, 18, 3),
+      error(CompileTimeErrorCode.ARGUMENT_TYPE_NOT_ASSIGNABLE, 18, 3),
     ]);
   }
 
@@ -283,18 +278,31 @@ class A<K, V> {
     f(v);
   }
 }''', [
-      error(StaticWarningCode.ARGUMENT_TYPE_NOT_ASSIGNABLE, 41, 1),
+      error(CompileTimeErrorCode.ARGUMENT_TYPE_NOT_ASSIGNABLE, 41, 1),
     ]);
   }
 
   test_invocation_functionTypes_optional() async {
     await assertErrorsInCode('''
-void acceptFunNumOptBool(void funNumOptBool([bool b])) {}
-void funNumBool(bool b) {}
+void acceptFunOptBool(void funNumOptBool([bool b])) {}
+void funBool(bool b) {}
 main() {
-  acceptFunNumOptBool(funNumBool);
+  acceptFunOptBool(funBool);
 }''', [
-      error(StrongModeCode.INVALID_CAST_FUNCTION, 116, 10),
+      error(CompileTimeErrorCode.INVALID_CAST_FUNCTION, 107, 7),
+    ]);
+  }
+
+  test_invocation_functionTypes_optional_method() async {
+    await assertErrorsInCode('''
+void acceptFunOptBool(void funOptBool([bool b])) {}
+class C {
+  static void funBool(bool b) {}
+}
+main() {
+  acceptFunOptBool(C.funBool);
+}''', [
+      error(CompileTimeErrorCode.INVALID_CAST_METHOD, 125, 9),
     ]);
   }
 
@@ -306,7 +314,7 @@ class A<T> {
 f(A<String> a) {
   a.m(1);
 }''', [
-      error(StaticWarningCode.ARGUMENT_TYPE_NOT_ASSIGNABLE, 50, 1),
+      error(CompileTimeErrorCode.ARGUMENT_TYPE_NOT_ASSIGNABLE, 50, 1),
     ]);
   }
 
@@ -316,7 +324,7 @@ f({String p = ''}) {}
 main() {
   f(p: 42);
 }''', [
-      error(StaticWarningCode.ARGUMENT_TYPE_NOT_ASSIGNABLE, 35, 5),
+      error(CompileTimeErrorCode.ARGUMENT_TYPE_NOT_ASSIGNABLE, 35, 5),
     ]);
   }
 
@@ -326,7 +334,7 @@ f([String p = '']) {}
 main() {
   f(42);
 }''', [
-      error(StaticWarningCode.ARGUMENT_TYPE_NOT_ASSIGNABLE, 35, 2),
+      error(CompileTimeErrorCode.ARGUMENT_TYPE_NOT_ASSIGNABLE, 35, 2),
     ]);
   }
 
@@ -336,7 +344,7 @@ f(String p) {}
 main() {
   f(42);
 }''', [
-      error(StaticWarningCode.ARGUMENT_TYPE_NOT_ASSIGNABLE, 28, 2),
+      error(CompileTimeErrorCode.ARGUMENT_TYPE_NOT_ASSIGNABLE, 28, 2),
     ]);
   }
 
@@ -346,7 +354,7 @@ typedef A<T>(T p);
 f(A<int> a) {
   a('1');
 }''', [
-      error(StaticWarningCode.ARGUMENT_TYPE_NOT_ASSIGNABLE, 37, 3),
+      error(CompileTimeErrorCode.ARGUMENT_TYPE_NOT_ASSIGNABLE, 37, 3),
     ]);
   }
 
@@ -358,7 +366,7 @@ main() {
   A a = getA();
   a('1');
 }''', [
-      error(StaticWarningCode.ARGUMENT_TYPE_NOT_ASSIGNABLE, 69, 3),
+      error(CompileTimeErrorCode.ARGUMENT_TYPE_NOT_ASSIGNABLE, 69, 3),
     ]);
   }
 
@@ -368,7 +376,7 @@ typedef A(int p);
 f(A a) {
   a('1');
 }''', [
-      error(StaticWarningCode.ARGUMENT_TYPE_NOT_ASSIGNABLE, 31, 3),
+      error(CompileTimeErrorCode.ARGUMENT_TYPE_NOT_ASSIGNABLE, 31, 3),
     ]);
   }
 
@@ -380,7 +388,7 @@ class A<T> {
 main() {
   new A<String>(42);
 }''', [
-      error(StaticWarningCode.ARGUMENT_TYPE_NOT_ASSIGNABLE, 52, 2),
+      error(CompileTimeErrorCode.ARGUMENT_TYPE_NOT_ASSIGNABLE, 52, 2),
     ]);
   }
 
@@ -392,7 +400,7 @@ class A {
 main() {
   new A(42);
 }''', [
-      error(StaticWarningCode.ARGUMENT_TYPE_NOT_ASSIGNABLE, 53, 2),
+      error(CompileTimeErrorCode.ARGUMENT_TYPE_NOT_ASSIGNABLE, 53, 2),
     ]);
   }
 
@@ -404,7 +412,7 @@ class A {
 main() {
   new A(42);
 }''', [
-      error(StaticWarningCode.ARGUMENT_TYPE_NOT_ASSIGNABLE, 46, 2),
+      error(CompileTimeErrorCode.ARGUMENT_TYPE_NOT_ASSIGNABLE, 46, 2),
     ]);
   }
 
@@ -419,19 +427,14 @@ g(C c) {
   print(h('s'));
 }
 ''', [
-      error(StaticWarningCode.ARGUMENT_TYPE_NOT_ASSIGNABLE, 99, 1),
+      error(CompileTimeErrorCode.ARGUMENT_TYPE_NOT_ASSIGNABLE, 99, 1),
     ]);
   }
 }
 
 @reflectiveTest
-class ArgumentTypeNotAssignableTest_NNBD extends ArgumentTypeNotAssignableTest {
-  @override
-  AnalysisOptionsImpl get analysisOptions => AnalysisOptionsImpl()
-    ..contextFeatures = FeatureSet.fromEnableFlags(
-      [EnableString.non_nullable],
-    );
-
+class ArgumentTypeNotAssignableWithNullSafetyTest
+    extends ArgumentTypeNotAssignableTest with WithNullSafetyMixin {
   test_binary_eqEq_covariantParameterType() async {
     await assertErrorsInCode(r'''
 class A {
@@ -445,8 +448,8 @@ main(A a, A? aq) {
   aq == null;
 }
 ''', [
-      error(StaticWarningCode.ARGUMENT_TYPE_NOT_ASSIGNABLE, 86, 1),
-      error(StaticWarningCode.ARGUMENT_TYPE_NOT_ASSIGNABLE, 97, 1),
+      error(CompileTimeErrorCode.ARGUMENT_TYPE_NOT_ASSIGNABLE, 86, 1),
+      error(CompileTimeErrorCode.ARGUMENT_TYPE_NOT_ASSIGNABLE, 97, 1),
     ]);
   }
 
@@ -458,7 +461,7 @@ m() {
 }
 n(int x) {}
 ''', [
-      error(StaticWarningCode.ARGUMENT_TYPE_NOT_ASSIGNABLE, 23, 1),
+      error(CompileTimeErrorCode.ARGUMENT_TYPE_NOT_ASSIGNABLE, 23, 1),
     ]);
   }
 
@@ -471,7 +474,7 @@ m() {
 }
 n(int x) {}
 ''', [
-      error(StaticWarningCode.ARGUMENT_TYPE_NOT_ASSIGNABLE, 24, 1),
+      error(CompileTimeErrorCode.ARGUMENT_TYPE_NOT_ASSIGNABLE, 24, 1),
     ]);
   }
 
@@ -490,5 +493,19 @@ n(int i) {}
   test_invocation_functionTypes_optional() async {
     // The test is currently generating an error where none is expected.
     await super.test_invocation_functionTypes_optional();
+  }
+
+  @override
+  test_invocation_functionTypes_optional_method() async {
+    await assertErrorsInCode('''
+void acceptFunOptBool(void funOptBool([bool b])) {}
+class C {
+  static void funBool(bool b) {}
+}
+main() {
+  acceptFunOptBool(C.funBool);
+}''', [
+      error(CompileTimeErrorCode.ARGUMENT_TYPE_NOT_ASSIGNABLE, 125, 9),
+    ]);
   }
 }

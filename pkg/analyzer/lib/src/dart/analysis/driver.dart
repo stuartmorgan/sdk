@@ -91,7 +91,7 @@ typedef WorkToWaitAfterComputingResult = Future<void> Function(String path);
 /// TODO(scheglov) Clean up the list of implicitly analyzed files.
 class AnalysisDriver implements AnalysisDriverGeneric {
   /// The version of data format, should be incremented on every format change.
-  static const int DATA_VERSION = 106;
+  static const int DATA_VERSION = 108;
 
   /// The length of the list returned by [_computeDeclaredVariablesSignature].
   static const int _declaredVariablesSignatureLength = 4;
@@ -1635,7 +1635,7 @@ class AnalysisDriver implements AnalysisDriverGeneric {
         null);
   }
 
-  void _reportException(String path, exception, StackTrace stackTrace) {
+  void _reportException(String path, Object exception, StackTrace stackTrace) {
     String contextKey;
     if (exception is _ExceptionState) {
       var state = exception as _ExceptionState;
@@ -1677,8 +1677,8 @@ class AnalysisDriver implements AnalysisDriverGeneric {
         .toBuffer();
   }
 
-  String _storeExceptionContext(
-      String path, FileState libraryFile, exception, StackTrace stackTrace) {
+  String _storeExceptionContext(String path, FileState libraryFile,
+      Object exception, StackTrace stackTrace) {
     if (allowedNumberOfContextsToWrite <= 0) {
       return null;
     } else {
