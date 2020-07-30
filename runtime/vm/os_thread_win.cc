@@ -5,15 +5,17 @@
 #include "platform/globals.h"  // NOLINT
 #if defined(HOST_OS_WINDOWS)
 
+#include "vm/growable_array.h"
+#include "vm/lockers.h"
+#include "vm/os_thread.h"
+
 #include <process.h>  // NOLINT
 
 #include "platform/address_sanitizer.h"
 #include "platform/assert.h"
 #include "platform/safe_stack.h"
+
 #include "vm/flags.h"
-#include "vm/growable_array.h"
-#include "vm/lockers.h"
-#include "vm/os_thread.h"
 
 namespace dart {
 
@@ -175,7 +177,7 @@ bool OSThread::GetCurrentStackBounds(uword* lower, uword* upper) {
 // FS segment register on x86 and GS segment register on x86_64.
 #if defined(_M_ARM64)
   ULONG_PTR low, high;
-  // XXX Not sure about type issues here.
+  // TODO: Validate that this matches the way 'upper' is defined.
   ::GetCurrentThreadStackLimits(&low, &high);
   *upper = reinterpret_cast<uword>(high);
 #elif defined(_WIN64)

@@ -7,6 +7,7 @@
 
 #include "vm/cpu.h"
 #include "vm/cpu_arm64.h"
+
 #include "vm/cpuinfo.h"
 #include "vm/simulator.h"
 
@@ -55,7 +56,7 @@ void CPU::FlushICache(uword start, uword size) {
                                       size, ZX_CACHE_FLUSH_INSN);
   ASSERT(result == ZX_OK);
 #elif defined(HOST_OS_WINDOWS)
-  // XXX untested
+  // TODO: Test that this works.
   ::FlushInstructionCache(::GetCurrentProcess(), reinterpret_cast<void*>(start),
                           size);
 #else

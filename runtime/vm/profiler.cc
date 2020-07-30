@@ -2,12 +2,11 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
-#include "vm/profiler.h"
-
 #include "platform/address_sanitizer.h"
-#include "platform/atomic.h"
 #include "platform/memory_sanitizer.h"
 #include "platform/utils.h"
+
+#include "platform/atomic.h"
 #include "vm/allocation.h"
 #include "vm/code_patcher.h"
 #include "vm/debugger.h"
@@ -19,6 +18,7 @@
 #include "vm/native_symbol.h"
 #include "vm/object.h"
 #include "vm/os.h"
+#include "vm/profiler.h"
 #include "vm/reusable_handles.h"
 #include "vm/signal_handler.h"
 #include "vm/simulator.h"
@@ -212,7 +212,8 @@ SampleBuffer::~SampleBuffer() {
   delete memory_;
 }
 
-AllocationSampleBuffer::~AllocationSampleBuffer() {}
+AllocationSampleBuffer::~AllocationSampleBuffer() {
+}
 
 Sample* SampleBuffer::At(intptr_t idx) const {
   ASSERT(idx >= 0);
